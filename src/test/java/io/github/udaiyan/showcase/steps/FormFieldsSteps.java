@@ -6,20 +6,20 @@ import io.cucumber.java.en.When;
 import io.github.udaiyan.showcase.config.FrameworkConfig;
 import io.github.udaiyan.showcase.context.TestContext;
 import io.github.udaiyan.showcase.pages.FormFieldsPage;
+import io.github.udaiyan.showcase.support.DialogManager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class FormFieldsSteps {
 
-    /** Stash key: message text of the last browser dialog seen in this scenario. */
-    private static final String LAST_DIALOG_MESSAGE = "lastDialogMessage";
-
     private final TestContext context;
     private final FrameworkConfig config;
+    private final DialogManager dialogs;
 
-    public FormFieldsSteps(TestContext context, FrameworkConfig config) {
+    public FormFieldsSteps(TestContext context, FrameworkConfig config, DialogManager dialogs) {
         this.context = context;
         this.config = config;
+        this.dialogs = dialogs;
     }
 
     private FormFieldsPage formFieldsPage() {
@@ -49,24 +49,16 @@ public class FormFieldsSteps {
 
     @When("I submit the form")
     public void iSubmitTheForm() {
-        // Register the dialog handler BEFORE the action that triggers it.
-        // With no listener, Playwright auto-dismisses dialogs and the assertion
-        // would have nothing to read. The handler runs on this scenario's thread
-        // while click() is in flight, so the stash is populated by the time
-        // submit() returns. The stash (not a page field) holds the evidence
-        // because page objects are created lazily per call.
-        context.page().onDialog(dialog -> {
-            context.stash().put(LAST_DIALOG_MESSAGE, dialog.message());
-            dialog.accept();
-        });
+        // Expectation declared before the trigger; the shared DialogManager
+        // owns capture + acceptance (extracted from this class in Phase 3).
+        dialogs.acceptNext();
         formFieldsPage().submit();
     }
 
     @Then("I see the confirmation {string}")
     public void iSeeTheConfirmation(String expectedMessage) {
-        // The dialog is gone; its captured text is the evidence.
-        assertThat(context.stash())
+        assertThat(dialogs.lastMessage())
                 .as("browser dialog message")
-                .containsEntry(LAST_DIALOG_MESSAGE, expectedMessage);
+                .isEqualTo(expectedMessage);
     }
 }
