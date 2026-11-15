@@ -30,7 +30,8 @@ public class Hooks {
     }
 
     @Before
-    public void startBrowser() {
+    public void startBrowser(Scenario scenario) {
+        context.setCurrentScenario(scenario);
         Playwright playwright = Playwright.create();
         BrowserType browserType = switch (config.browser().toLowerCase()) {
             case "firefox" -> playwright.firefox();

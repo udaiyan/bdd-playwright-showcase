@@ -4,6 +4,7 @@ import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
+import io.cucumber.java.Scenario;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +20,7 @@ public class TestContext {
     private Browser browser;
     private BrowserContext browserContext;
     private Page page;
+    private Scenario currentScenario;
 
     /** Generic stash for passing state between steps without static fields. */
     private final Map<String, Object> stash = new HashMap<>();
@@ -36,4 +38,12 @@ public class TestContext {
     public void setPage(Page p)                 { this.page = p; }
 
     public Map<String, Object> stash()          { return stash; }
+
+    public void setCurrentScenario(Scenario s)  { this.currentScenario = s; }
+
+    public void attachAxeReport(String report) {
+        if (currentScenario != null) {
+            currentScenario.attach(report.getBytes(), "text/plain", "axe-violations");
+        }
+    }
 }

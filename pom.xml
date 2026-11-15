@@ -14,9 +14,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>21</maven.compiler.release>
 
-        <!-- Pinned known-good versions; bump to latest from Maven Central -->
         <cucumber.version>7.20.1</cucumber.version>
         <playwright.version>1.49.0</playwright.version>
+        <axe.version>4.8.0</axe.version>
         <junit.version>5.11.3</junit.version>
         <assertj.version>3.26.3</assertj.version>
         <surefire.version>3.5.2</surefire.version>
@@ -53,7 +53,6 @@
             <artifactId>cucumber-junit-platform-engine</artifactId>
             <scope>test</scope>
         </dependency>
-        <!-- Scenario-scoped dependency injection: one container per scenario -->
         <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-picocontainer</artifactId>
@@ -68,6 +67,12 @@
             <groupId>com.microsoft.playwright</groupId>
             <artifactId>playwright</artifactId>
             <version>${playwright.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.deque.html.axe-core</groupId>
+            <artifactId>playwright</artifactId>
+            <version>${axe.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
