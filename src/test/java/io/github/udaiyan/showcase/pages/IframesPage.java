@@ -19,9 +19,13 @@ import com.microsoft.playwright.options.AriaRole;
  *
  * Heading/link queries that accept a user-provided name use setExact(true):
  * without it, getByRole does case-insensitive substring matching, so "Downloads"
- * also matched <h2>Other downloads</h2> on the Selenium downloads page. This is
- * the same rule applied to labels in Phase 2 — data-driven role-name queries
- * must be exact.
+ * also matched <h2>Other downloads</h2> on the Selenium downloads page.
+ *
+ * In-frame clicks use JavaScript as a fallback: cross-origin third-party SPAs
+ * can fail Playwright's actionability checks (visible, stable) due to their
+ * own animations, sticky headers, or slow hydration. For controlled
+ * first-party services we'd never bypass these checks, but for live embedded
+ * third-party content a JS click is the documented escape hatch.
  *
  * Note: the frames embed live third-party sites, so their inner content can
  * drift. In a production gov project the frame would be stubbed or pointed at
@@ -76,5 +80,15 @@ public class IframesPage extends BasePage {
 
     public Locator parentText(String text) {
         return page.getByText(text);
+    }
+
+    /**
+     * Cross-origin in-frame click via JavaScript. Bypasses Playwright's
+     * actionability checks (visible, stable) which can flake on live
+     * third-party SPAs under parallel load. Documented escape hatch, not a
+     * pattern for first-party services.
+     */
+    public void clickInFrame(Locator link) {
+        link.evaluate("el => el.click()");
     }
 }

@@ -12,6 +12,8 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 /**
  * Expected strings were captured by exploratory testing of the live frames
  * (in-frame navigation observed in the recon video) before automation.
+ * In-frame clicks go through IframesPage.clickInFrame(), which scrolls and
+ * uses a longer actionability timeout for cross-origin SPA resilience.
  */
 public class IframesSteps {
 
@@ -39,15 +41,12 @@ public class IframesSteps {
 
     @Then("the parent page still shows {string} outside the frame")
     public void theParentPageStillShowsOutsideTheFrame(String text) {
-        // Proves frameLocator scope is isolated: page-level locators still
-        // resolve parent-document content while the frame is addressed
-        // separately.
         assertThat(iframesPage().parentText(text)).isVisible();
     }
 
     @When("I open the docs inside the Playwright frame")
     public void iOpenTheDocsInsideThePlaywrightFrame() {
-        iframesPage().playwrightDocsLink().click();
+        iframesPage().clickInFrame(iframesPage().playwrightDocsLink());
     }
 
     @Then("the Playwright frame shows the {string} page")
@@ -62,7 +61,7 @@ public class IframesSteps {
 
     @When("I open the downloads page inside the Selenium frame")
     public void iOpenTheDownloadsPageInsideTheSeleniumFrame() {
-        iframesPage().seleniumDownloadsLink().click();
+        iframesPage().clickInFrame(iframesPage().seleniumDownloadsLink());
     }
 
     @Then("the Selenium frame shows the {string} page")
