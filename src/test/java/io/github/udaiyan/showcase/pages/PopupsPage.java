@@ -32,7 +32,7 @@ public class PopupsPage extends BasePage {
     }
 
     public void open(String baseUrl) {
-        page.navigate(baseUrl + "/popups/");
+        navigate(baseUrl + "/popups/");
     }
 
     public void openAlert()   { alertButton.click(); }

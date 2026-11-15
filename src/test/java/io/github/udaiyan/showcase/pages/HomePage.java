@@ -10,14 +10,13 @@ public class HomePage extends BasePage {
 
     public HomePage(Page page) {
         super(page);
-        // getByRole name matching is substring + case-insensitive by default.
         this.welcomeHeading = page.getByRole(AriaRole.HEADING,
                 new Page.GetByRoleOptions()
                         .setName("Welcome to your software automation practice website"));
     }
 
     public void open(String baseUrl) {
-        page.navigate(baseUrl + "/");
+        navigate(baseUrl + "/");
     }
 
     public Locator welcomeHeading() {

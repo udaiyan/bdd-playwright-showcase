@@ -18,7 +18,6 @@ import com.microsoft.playwright.options.AriaRole;
  */
 public class FormFieldsPage extends BasePage {
 
-    // Test data constants — practice site only, never real credentials.
     private static final String TEST_PASSWORD = "Practice-password-1!";
     private static final String TEST_EMAIL = "practice@example.com";
 
@@ -31,21 +30,17 @@ public class FormFieldsPage extends BasePage {
 
     public FormFieldsPage(Page page) {
         super(page);
-        // Ambiguous labels (hidden modal duplicates) -> site-provided test IDs.
         nameInput        = page.getByTestId("name-input");
         emailInput       = page.getByTestId("email");
         messageInput     = page.getByTestId("message");
-        // Unique, properly associated label -> stay semantic.
         passwordInput    = page.getByLabel("Password");
-        // Question text is not a reliably associated label (getByLabel timed
-        // out) -> use the site's test instrumentation.
         automationSelect = page.getByTestId("automation");
         submitButton     = page.getByRole(AriaRole.BUTTON,
                 new Page.GetByRoleOptions().setName("Submit"));
     }
 
     public void open(String baseUrl) {
-        page.navigate(baseUrl + "/form-fields/");
+        navigate(baseUrl + "/form-fields/");
     }
 
     public void enterContactDetails(String name, String message) {
@@ -55,11 +50,6 @@ public class FormFieldsPage extends BasePage {
         messageInput.fill(message);
     }
 
-    /**
-     * Data-driven label locators MUST be exact: getByLabel defaults to
-     * case-insensitive substring matching, so "Red" also matched the hidden
-     * modal's "Name(required)" label. Exact matching kills that whole class of bug.
-     */
     public void chooseDrink(String drink) {
         page.getByLabel(drink, new Page.GetByLabelOptions().setExact(true)).check();
     }
@@ -68,7 +58,6 @@ public class FormFieldsPage extends BasePage {
         page.getByLabel(colour, new Page.GetByLabelOptions().setExact(true)).check();
     }
 
-    /** Selects by option value ("yes"/"no"), not visible label ("Yes"/"No"). */
     public void answerAutomation(String value) { automationSelect.selectOption(value); }
 
     public void submit() { submitButton.click(); }
