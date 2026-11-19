@@ -7,6 +7,7 @@ import com.microsoft.playwright.options.WaitUntilState;
  * Pages expose navigation, actions and locators — assertions live in steps.
  * Locators are role/label-first (getByRole/getByLabel) wherever possible:
  * resilient, and they double as an implicit accessibility check.
+ * abstract - so can't instance this and needs to be extended for the pages.
  */
 public abstract class BasePage {
 

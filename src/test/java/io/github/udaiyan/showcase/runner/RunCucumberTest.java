@@ -11,6 +11,10 @@ import static io.cucumber.junit.platform.engine.Constants.PLUGIN_PROPERTY_NAME;
 /**
  * Single entry point. Tag filtering at runtime:
  *   mvn verify -Dcucumber.filter.tags="@smoke and not @wip"
+ *   This is the JUnit Platform Suite runner that boots Cucumber
+ *   inside Maven's Surefire plugin. It contains no test logic itself -
+ *   it's pure configuration that tells
+ *   JUnit how to discover and run my BDD scenarios.
  */
 @Suite
 @IncludeEngines("cucumber")

@@ -7,8 +7,7 @@ import java.util.function.Consumer;
 
 /**
  * Scenario-scoped JavaScript dialog handling, shared by step classes via
- * PicoContainer. Extracted in Phase 3 when a second feature needed dialogs
- * (Phase 2 had it inline) — one pattern, one place.
+ * PicoContainer.
  *
  * Declare the expectation BEFORE the action that triggers the dialog:
  *   dialogs.acceptNext();          // alert / confirm OK

@@ -41,7 +41,9 @@ public class Hooks {
         };
 
         Browser browser = browserType.launch(
-                new BrowserType.LaunchOptions().setHeadless(config.headless()));
+                new BrowserType.LaunchOptions()
+                        .setHeadless(config.headless())
+                        .setSlowMo(config.slowmoMs()));
         BrowserContext browserContext = browser.newContext();
         browserContext.setDefaultTimeout(config.defaultTimeoutMs());
         Page page = browserContext.newPage();

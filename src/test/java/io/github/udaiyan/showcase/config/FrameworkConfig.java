@@ -31,4 +31,6 @@ public class FrameworkConfig {
     public String browser()          { return get("browser"); }
     public boolean headless()        { return Boolean.parseBoolean(get("headless")); }
     public double defaultTimeoutMs() { return Double.parseDouble(get("default.timeout.ms")); }
+    public long slowmoMs()           { return Long.parseLong(get("slowmo.ms"));
+    }
 }
